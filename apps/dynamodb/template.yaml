@@ -2,14 +2,64 @@ AWSTemplateFormatVersion: '2010-09-09'
 
 Transform: AWS::Serverless-2016-10-31
 
+Globals:
+    Function:
+        CodeUri: ./
+        Runtime: nodejs18.x
+        Architectures:
+            - arm64
+        Environment:
+            Variables:
+                AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+                NODE_OPTIONS: --enable-source-maps
+                TABLE_CATEGORIES_NAME: !Ref TableCategories
+
 Resources:
     TableCategories:
-        Type: AWS::Serverless::SimpleTable
+        Type: AWS::DynamoDB::Table
+        Properties:
+            AttributeDefinitions:
+                - AttributeName: pk
+                  AttributeType: S
+            KeySchema:
+                - AttributeName: 'pk'
+                  KeyType: 'HASH'
+            ProvisionedThroughput:
+                ReadCapacityUnits: '5'
+                WriteCapacityUnits: '5'
+            StreamSpecification:
+                StreamViewType: NEW_IMAGE
+
+    TableCategoriesStreamConsumer:
+        Type: AWS::Serverless::Function
+        Properties:
+            Handler: table-categories-stream-consumer.handler
+            Policies: AWSLambdaDynamoDBExecutionRole
+            Events:
+                Stream:
+                    Type: DynamoDB
+                    Properties:
+                        BatchSize: 100
+                        StartingPosition: LATEST
+                        Stream: !GetAtt TableCategories.StreamArn
+        Metadata:
+            BuildMethod: esbuild
+            BuildProperties:
+                Minify: true
+                Target: 'es2020'
+                Sourcemap: true
+                EntryPoints:
+                    - apps/dynamodb/handlers/table-categories-stream-consumer.ts
+                External:
+                    - '@aws-sdk/client-dynamodb'
 
 Outputs:
-    TableCategoriesArn:
-        Description: 'Table Categories Arn'
-        Value: !GetAtt TableCategories.Arn
     TableCategoriesName:
         Description: 'Table Categories Name'
         Value: !Ref TableCategories
+    TableCategoriesArn:
+        Description: 'Table Categories Arn'
+        Value: !GetAtt TableCategories.Arn
+    TableCategoriesStreamArn:
+        Description: 'Table Categories Stream Arn'
+        Value: !GetAtt TableCategories.StreamArn

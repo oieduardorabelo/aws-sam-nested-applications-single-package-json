@@ -5,11 +5,19 @@ Transform: AWS::Serverless-2016-10-31
 Description: AWS SAM Nested Applications
 
 Resources:
+    #
+    # Using lambda runtime nodejs18.x
+    # Using aws-sdk v3
+    #
     StackDynamodb:
         Type: AWS::Serverless::Application
         Properties:
             Location: apps/dynamodb/template.yaml
 
+    #
+    # Using lambda runtime nodejs16.x
+    # Using aws-sdk v2
+    #
     StackRestApi:
         Type: AWS::Serverless::Application
         Properties:

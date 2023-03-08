@@ -16,7 +16,7 @@ Globals:
     Function:
         CodeUri: ./
         Timeout: 25
-        Runtime: nodejs18.x
+        Runtime: nodejs16.x
         Architectures:
             - arm64
         Environment:
@@ -66,6 +66,20 @@ Resources:
                 Sourcemap: true
                 EntryPoints:
                     - apps/rest-api/handlers/get-categories.ts
+                External:
+                    - 'aws-sdk'
+
+    ConnGetCategoriesFunctionToTableCategories:
+        Type: AWS::Serverless::Connector
+        Properties:
+            Destination:
+                Arn: !Ref TableCategoriesArn
+                Type: AWS::DynamoDB::Table
+            Permissions:
+                - Read
+                - Write
+            Source:
+                Id: GetCategoriesFunction
 
     RestApi:
         Type: AWS::Serverless::Api

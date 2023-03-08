@@ -43,11 +43,17 @@ Resources:
 
 You can use any AWS SAM CLI command, make sure you include `--base-dir .` when running from the root of the project.
 
-For example:
+With `sync`:
 
 ```bash
 sam sync --base-dir .
+```
+
+With `deploy`:
+
+```
 sam build --base-dir .
+sam deploy
 ```
 
 ## Running locally
