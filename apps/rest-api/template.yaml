@@ -1,0 +1,83 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+    TableCategoriesArn:
+        Type: String
+    TableCategoriesName:
+        Type: String
+    RestApiStageName:
+        Type: String
+        Description: Stage name for the API
+        Default: v0
+
+Globals:
+    Function:
+        CodeUri: ./
+        Timeout: 25
+        Runtime: nodejs18.x
+        Architectures:
+            - arm64
+        Environment:
+            Variables:
+                AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+                NODE_OPTIONS: --enable-source-maps
+                TABLE_CATEGORIES_ARN: !Ref TableCategoriesArn
+                TABLE_CATEGORIES_NAME: !Ref TableCategoriesName
+
+Resources:
+    GetBooksFunction:
+        Type: AWS::Serverless::Function
+        Properties:
+            Handler: get-books.handler
+            Events:
+                GetBooks:
+                    Type: Api
+                    Properties:
+                        Path: /books
+                        Method: get
+        Metadata:
+            BuildMethod: esbuild
+            BuildProperties:
+                Minify: true
+                Target: 'es2020'
+                Sourcemap: true
+                EntryPoints:
+                    - apps/rest-api/handlers/get-books.ts
+
+    GetCategoriesFunction:
+        Type: AWS::Serverless::Function
+        Properties:
+            Handler: get-categories.handler
+            Events:
+                GetCategories:
+                    Type: Api
+                    Properties:
+                        Path: /categories
+                        Method: get
+        Metadata:
+            BuildMethod: esbuild
+            BuildProperties:
+                Minify: true
+                Target: 'es2020'
+                Sourcemap: true
+                EntryPoints:
+                    - apps/rest-api/handlers/get-categories.ts
+
+        ServerlessRestApi:
+            Type: AWS::Serverless::Api
+            Properties:
+                OpenApiVersion: '3.0.1' # Declaring this option prevents AWS SAM from creating a default "Stage"
+                StageName: !Ref RestApiStageName
+
+Outputs:
+    ServerlessRestApiUrl:
+        Description: 'API Gateway endpoint URL for Prod stage for Hello World function'
+        Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/${RestApiStageName}'
+    GetBooksFunction:
+        Description: 'Get Books Lambda Function ARN'
+        Value: !GetAtt GetBooksFunction.Arn
+    GetBooksFunctionIamRole:
+        Description: 'Implicit IAM Role created for Get Books Lambda Function'
+        Value: !GetAtt GetBooksFunctionRole.Arn

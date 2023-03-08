@@ -1,0 +1,15 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+    TableCategories:
+        Type: AWS::Serverless::SimpleTable
+
+Outputs:
+    TableCategoriesArn:
+        Description: 'Table Categories Arn'
+        Value: !GetAtt TableCategories.Arn
+    TableCategoriesName:
+        Description: 'Table Categories Name'
+        Value: !Ref TableCategories
