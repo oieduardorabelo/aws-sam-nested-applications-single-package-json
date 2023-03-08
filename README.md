@@ -10,6 +10,12 @@ The parent AWS SAM application is defined in `./template.yaml` and child applica
 
 This enables the developer to use a single `package.json` and share it across the entire application. `esbuild` will be packing each lambda handler bundling the correct dependencies imported by each handler.
 
+## Drawback
+
+You need to define `--base-dir` for every AWS SAM CLI command that have it as an option.
+
+When using `sam sync` chaging the source code of one lambda with sync all lambdas of that stack. For example, `apps/rest-api` is a stack with 2 lambdas. If you change the source code of one lambda, all 2 lambdas will be synced.
+
 ## How to use
 
 We have a few conventions:
