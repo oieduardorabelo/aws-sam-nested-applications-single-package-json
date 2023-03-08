@@ -54,14 +54,14 @@ sam build --base-dir .
 
 You can run it locally as you would normally do with AWS SAM CLI.
 
-For example:
+With `local start-api`:
 
 ```bash
 sam build --base-dir .
 sam local start-api
 ```
 
-You can also run the lambda handlers locally using `sam local invoke`:
+With `local invoke`:
 
 ```bash
 sam build --base-dir .
