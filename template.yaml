@@ -19,6 +19,6 @@ Resources:
                 TableCategoriesName: !GetAtt StackDynamodb.Outputs.TableCategoriesName
 
 Outputs:
-    ServerlessRestApi:
-        Description: 'API Gateway endpoint URL for Prod stage for Hello World function'
-        Value: !GetAtt StackRestApi.Outputs.ServerlessRestApiUrl
+    RestApiUrl:
+        Description: 'API Gateway endpoint URL'
+        Value: !GetAtt StackRestApi.Outputs.RestApiUrl

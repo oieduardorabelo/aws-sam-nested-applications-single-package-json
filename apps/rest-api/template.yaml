@@ -37,6 +37,7 @@ Resources:
                     Properties:
                         Path: /books
                         Method: get
+                        RestApiId: !Ref RestApi
         Metadata:
             BuildMethod: esbuild
             BuildProperties:
@@ -56,6 +57,7 @@ Resources:
                     Properties:
                         Path: /categories
                         Method: get
+                        RestApiId: !Ref RestApi
         Metadata:
             BuildMethod: esbuild
             BuildProperties:
@@ -65,16 +67,17 @@ Resources:
                 EntryPoints:
                     - apps/rest-api/handlers/get-categories.ts
 
-        ServerlessRestApi:
-            Type: AWS::Serverless::Api
-            Properties:
-                OpenApiVersion: '3.0.1' # Declaring this option prevents AWS SAM from creating a default "Stage"
-                StageName: !Ref RestApiStageName
+    RestApi:
+        Type: AWS::Serverless::Api
+        Properties:
+            Cors: "'*'"
+            OpenApiVersion: '3.0.1' # Declaring this option prevents AWS SAM from creating a default "Stage"
+            StageName: !Ref RestApiStageName
 
 Outputs:
-    ServerlessRestApiUrl:
+    RestApiUrl:
         Description: 'API Gateway endpoint URL for Prod stage for Hello World function'
-        Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/${RestApiStageName}'
+        Value: !Sub 'https://${RestApi}.execute-api.${AWS::Region}.amazonaws.com/${RestApiStageName}'
     GetBooksFunction:
         Description: 'Get Books Lambda Function ARN'
         Value: !GetAtt GetBooksFunction.Arn

@@ -18,7 +18,7 @@ lint = true
 
 [default.deploy]
 [default.deploy.parameters]
-capabilities = "CAPABILITY_IAM"
+capabilities = "CAPABILITY_IAM CAPABILITY_AUTO_EXPAND"
 confirm_changeset = true
 resolve_s3 = true
 
