@@ -2,7 +2,11 @@
 
 This is an example of using AWS SAM with nested applications sharing a single `package.json`.
 
-The Rest API is a TypeScript application (`apps/rest-api`) that uses `dependencies` from the root `package.json`.
+We have a Rest API TypeScript application (`apps/rest-api`) that uses `dependencies` from the root `package.json`.
+
+We have a DynamoDB Stream with a TypeScript lambda consumer (`apps/dynamodb-stream-consumer`) that uses `dependencies` from the root `package.json`.
+
+Any application can define its own TypeScript Lambda and use the root `package.json`.
 
 The parent AWS SAM application is defined in `./template.yaml` and child applications are defined in `./apps/*/template.yaml`.
 
@@ -16,7 +20,7 @@ You need to define `--base-dir` for every AWS SAM CLI command that have it as an
 
 When using `sam sync` chaging the source code of one lambda with sync all lambdas of that stack. For example, `apps/rest-api` is a stack with 2 lambdas. If you change the source code of one lambda, all 2 lambdas will be synced.
 
-## How to use
+## Conventions on how to use
 
 We have a few conventions:
 
