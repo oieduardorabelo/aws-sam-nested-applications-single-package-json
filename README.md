@@ -17,7 +17,7 @@ We have a few conventions:
 1. The `package.json` is located in the root of the project
 2. The `CodeUri` of any lambda is always `./`
 3. Definitions for lambda handlers entry points are defined using the full relative path of the project root
-4. When running `sam build` we need to define `--base-dir ./` to make sure that `esbuild` will be able to find the `package.json` in the root of the project and resolve all relative paths correctly
+4. When running `sam build` from the root of the project, we need to define `--base-dir .` to make sure that `esbuild` will be able to find the `package.json` in the root of the project and resolve all relative paths correctly
 
 For example:
 
@@ -57,6 +57,7 @@ You can run it locally as you would normally do with AWS SAM CLI.
 For example:
 
 ```bash
+sam build --base-dir .
 sam local start-api
 ```
 
