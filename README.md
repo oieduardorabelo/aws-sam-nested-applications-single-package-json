@@ -2,9 +2,9 @@
 
 This is an example of using AWS SAM with nested applications sharing a single `package.json`.
 
-We have a Rest API TypeScript application (`apps/rest-api`) that uses `dependencies` from the root `package.json`.
+We have a Rest API TypeScript application (`apps/rest-api/handlers`) that uses `dependencies` from the root `package.json`.
 
-We have a DynamoDB Stream with a TypeScript lambda consumer (`apps/dynamodb-stream-consumer`) that uses `dependencies` from the root `package.json`.
+We have a DynamoDB Stream with a TypeScript lambda consumer (`apps/dynamodb/handlers`) that uses `dependencies` from the root `package.json`.
 
 Any application can define its own TypeScript Lambda and use the root `package.json`.
 
